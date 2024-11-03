@@ -1,4 +1,22 @@
+local ts_utils = require("nvim-treesitter.ts_utils")
 local M = {}
+
+function M.get_context()
+	local node = ts_utils.get_node_at_cursor()
+	if not node then
+		return "No context found"
+	end
+
+	-- Get the parent node to find the function or class context
+	local parent = node:parent()
+	local context = ""
+	while parent do
+		context = context .. parent:type() .. " -> "
+		parent = parent:parent()
+	end
+
+	return "Current Context: " .. context:sub(1, -4)
+end
 
 function M.toggle_menu()
 	print("hello world")
